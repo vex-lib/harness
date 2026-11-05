@@ -8,9 +8,7 @@
 #include <string.h>
 
 #include "exception/throw.h"
-#include "annotation/definition.h"
-#include "annotation/overview.h"
-#include "annotation/intention.h"
+#include "annotation/annotation.h"
 /**
  * Header-only cold support. Constructor counting supports 0..8; unsupported
  * forms deliberately name an undeclared Class_N and fail client compilation.
