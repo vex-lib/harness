@@ -3,13 +3,13 @@
 > Universal constitution: `gist.md` is the compressed law list; `PREFERENCES.md` is its rationale.
 
 ## 0. Constitution Link (supreme)
-- [gist.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a#file-gist-md) — the compressed law list, mirrored in this workspace at `../../../metadata/gists/preferences/gist.md`. It is the only normative law text; `../../../metadata/gists/preferences/PREFERENCES.md` carries the rationale and is never ingested whole. Numbers are slice addresses inside one file, never law identity: cite by Title.
+- [gist.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a#file-gist-md) — the compressed law list, mirrored in this workspace at `../../metadata/gists/preferences/gist.md`. It is the only normative law text; `../../../metadata/gists/preferences/PREFERENCES.md` carries the rationale and is never ingested whole. Numbers are slice addresses inside one file, never law identity: cite by Title.
 - All universal laws bind this repository. Read one on demand from the workspace root: `./tools/prefs law "<title>"`, `./tools/prefs section "<section>"`, `./tools/prefs repo <name>`.
 - These exclusive preferences govern `harness` (R4 agent interface), the user's **own agent** integrated with this ecosystem. R4 borrows Relational Engine memory/IO and Vexspoke CPU/behavior, consumes `api-haven` connectors **as-is**, and composes `darling-framework` for interface. This blueprint has no implemented engine integration; connector/GPU/OS implementation ownership does not move.
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
-Universal laws are inherited from the compressed constitution (`../../../metadata/gists/preferences/gist.md`); this table indexes the additional laws specific to this repository.
+Universal laws are inherited from the compressed constitution (`../../metadata/gists/preferences/gist.md`); this table indexes the additional laws specific to this repository.
 
 | Law Title | Scope | Enforcement |
 | :--- | :--- | :--- |
@@ -48,7 +48,7 @@ Reaching into R5 internals or shipping interpreted orchestration couples the age
 3. **Bounded children only.** Every external tool is a bounded child: 100 ms reap slices, `SIGTERM` cancel (Bounded Wait Law); no unbounded wait or `system()`.
 4. **Cold validation.** Validate agent input once at the cold seam (Cold-Strict, Hot-Minimal Validation Law); failures reject loudly (THROW Law).
 5. **Agent objects, not duplicate drivers.** Planned Model, Prompt, Conversation, Answer, Question, Tool, ToolRegistry and Harness objects own agent policy, history and interface state. HarnessMcp describes the agent's own tool/resource surface; protocol parsing/hosting and external MCP transport consume API Haven contracts, never a parallel R4 implementation. This vocabulary is planned, not an implemented API or model/provider integration claim.
-6. **Proof before trust.** Future mirrored `../../../tests/harness` owners prove registry growth/exhaustion, bounded retained history/output, failure/recovery, cancellation and actual tool/provider seams. Legal shared-state pressure follows the Deliberate Exhaustion and Backend Trust Law; fake providers and documentation checks alone prove neither live integration nor production readiness.
+6. **Proof before trust.** Future mirrored `../../tests/harness` owners prove registry growth/exhaustion, bounded retained history/output, failure/recovery, cancellation and actual tool/provider seams. Legal shared-state pressure follows the Deliberate Exhaustion and Backend Trust Law; fake providers and documentation checks alone prove neither live integration nor production readiness.
 
 ---
 
