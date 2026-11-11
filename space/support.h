@@ -23,7 +23,7 @@
 #define SPACE_CONSTRUCT(Class, ...) SPACE_JOIN(Class##_, SPACE_COUNT(__VA_ARGS__))(__VA_ARGS__)
 
 /**
- * Handle storage uses the vexgraph-ecosystem-gitrepo's 23+1 name extent in this draft.
+ * Handle storage uses the ecosystem's 23+1 name extent in this draft.
  */
 #define MODEL_USER_NAME_CAP 24u
 
@@ -33,7 +33,7 @@
 static inline bool Space_nameValid(const char *name) {
     if (name == nullptr || name[0] == '\0')
         return false;
-    for (size_t i = 0; i < MODEL_USER_NAME_CAP; ++i) {
+    for (bytes i = 0; i < MODEL_USER_NAME_CAP; ++i) {
         unsigned char c = (unsigned char) name[i];
         if (c == 0)
             return true;
@@ -46,7 +46,7 @@ static inline bool Space_nameValid(const char *name) {
 /**
  * Formats cold metadata, reporting one diagnostic on rejection/truncation.
  */
-static inline bool Space_format(char *dest, size_t cap, bool *outTruncated, const char *format, ...) {
+static inline bool Space_format(char *dest, bytes cap, bool *outTruncated, const char *format, ...) {
     if (outTruncated != nullptr)
         *outTruncated = false;
     if (dest == nullptr || cap == 0) {
@@ -59,7 +59,7 @@ static inline bool Space_format(char *dest, size_t cap, bool *outTruncated, cons
     va_start(args, format);
     int n = vsnprintf(dest, cap, format, args);
     va_end(args);
-    if (n < 0 || (size_t) n >= cap) {
+    if (n < 0 || (bytes) n >= cap) {
         if (outTruncated != nullptr)
             *outTruncated = true;
         THROW("space projection: truncated");
@@ -73,14 +73,14 @@ static inline bool Space_format(char *dest, size_t cap, bool *outTruncated, cons
  * Control/non-ASCII bytes become \xHH for an unambiguous byte-span projection.
  * Internal callers supply a valid terminated prefix with available capacity.
  */
-static inline bool Space_quote(const char *text, size_t length, char *dest, size_t cap, bool *outTruncated) {
+static inline bool Space_quote(const char *text, bytes length, char *dest, bytes cap, bool *outTruncated) {
     static const char HEX[] = "0123456789abcdef";
-    size_t at = strlen(dest);
+    bytes at = strlen(dest);
     bool cut = false;
-    for (size_t i = 0; i < length; ++i) {
+    for (bytes i = 0; i < length; ++i) {
         unsigned char c = (unsigned char) text[i];
         char escaped[4];
-        size_t n = 1;
+        bytes n = 1;
         escaped[0] = (char) c;
         if (c == '\n' || c == '\t' || c == '"' || c == '\\') {
             escaped[0] = '\\';

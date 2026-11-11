@@ -71,7 +71,7 @@ class ArityCompileTest(unittest.TestCase):
 
     def test_wrong_argument_types_are_rejected(self):
         for expr in ("(void) ModelUser(1, 2, 3);",          # int where const char* is required
-                     "(void) Channel(\"x\", 2);"):          # string where uint64_t is required
+                     "(void) Channel(\"x\", 2);"):          # string where u64 is required
             with self.subTest(expr=expr):
                 ok, _ = syntax_check(f"int main(void){{ {expr} return 0; }}")
                 self.assertFalse(ok, f"{expr} unexpectedly compiled")

@@ -46,7 +46,7 @@ int main(void) {
     CHECK("zero channel rejected", Message(5, 0, 0, 0, payload, 5).id == 0);
     CHECK("null text rejected", Message(5, 6, 0, 0, nullptr, 5).id == 0);
     CHECK("zero length rejected", Message(5, 6, 0, 0, payload, 0).id == 0);
-    CHECK("oversized length rejected", Message(5, 6, 0, 0, payload, (size_t) PTRDIFF_MAX + 1u).id == 0);
+    CHECK("oversized length rejected", Message(5, 6, 0, 0, payload, (bytes) PTRDIFF_MAX + 1u).id == 0);
 
     // --- Length-based spans: embedded NUL and non-terminated bytes survive.
     const char raw[4] = { 'a', '\0', 'b', 'c' };

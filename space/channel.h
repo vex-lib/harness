@@ -9,22 +9,22 @@
  * Flat message history and HernessServer admission remain unimplemented.
  */
 typedef struct Channel {
-    uint64_t id;
-    uint64_t serverId;
-    uint64_t modelUserId;
+    u64 id;
+    u64 serverId;
+    u64 modelUserId;
 } Channel;
 
 Channel Channel_0(void);
-Channel Channel_2(uint64_t serverId, uint64_t modelUserId);
+Channel Channel_2(u64 serverId, u64 modelUserId);
 
 #define Channel(...) SPACE_CONSTRUCT(Channel, __VA_ARGS__)
 #define Channel_zero() Channel_0()
 
-uint64_t Channel_getId(const Channel *self);
-uint64_t Channel_getServerId(const Channel *self);
-uint64_t Channel_getModelUserId(const Channel *self);
+u64 Channel_getId(const Channel *self);
+u64 Channel_getServerId(const Channel *self);
+u64 Channel_getModelUserId(const Channel *self);
 
-bool Channel_toString(const Channel *self, char *dest, size_t cap, bool *outTruncated);
-bool Channel_toStringStruct(const Channel *self, char *dest, size_t cap, bool *outTruncated);
+bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTruncated);
+bool Channel_toStringStruct(const Channel *self, char *dest, bytes cap, bool *outTruncated);
 
 #endif

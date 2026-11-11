@@ -17,12 +17,12 @@
  * STRUCT FIELDS (Mirroring space/message.h):
  * ----------------------------------------------------------------------------
  *   Message {
- *     uint64_t id;           // event identity
- *     uint64_t channelId;    // discussion route
- *     uint64_t authorId;     // sender; zero denotes host
- *     uint64_t taskId;       // thread; zero denotes ordinary discussion
+ *     u64 id;           // event identity
+ *     u64 channelId;    // discussion route
+ *     u64 authorId;     // sender; zero denotes host
+ *     u64 taskId;       // thread; zero denotes ordinary discussion
  *     const char *text;      // borrowed immutable bytes
- *     size_t length;         // payload byte extent
+ *     bytes length;         // payload byte extent
  *   }
  *
  * FUNCTION REGISTRY:
@@ -61,7 +61,7 @@ Message Message_0(void) {
 /**
  * Admits live immutable text with representable length, without copy/decoding.
  */
-Message Message_6(uint64_t id, uint64_t channelId, uint64_t authorId, uint64_t taskId, const char *text, size_t length) {
+Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, const char *text, bytes length) {
     if (id == 0 || channelId == 0 || text == nullptr || length == 0 || length > PTRDIFF_MAX) {
         THROW("message: invalid input");
         return Message_0();
@@ -72,7 +72,7 @@ Message Message_6(uint64_t id, uint64_t channelId, uint64_t authorId, uint64_t t
 /**
  * Returns the immutable event identity, or zero for nullptr.
  */
-uint64_t Message_getId(const Message *self) {
+u64 Message_getId(const Message *self) {
     if (self == nullptr)
         return 0;
     return (*self).id;
@@ -81,7 +81,7 @@ uint64_t Message_getId(const Message *self) {
 /**
  * Returns the destination identity without following a pointer chain.
  */
-uint64_t Message_getChannelId(const Message *self) {
+u64 Message_getChannelId(const Message *self) {
     if (self == nullptr)
         return 0;
     return (*self).channelId;
@@ -90,7 +90,7 @@ uint64_t Message_getChannelId(const Message *self) {
 /**
  * Returns the sender identity; zero is a host marker, not authentication proof.
  */
-uint64_t Message_getAuthorId(const Message *self) {
+u64 Message_getAuthorId(const Message *self) {
     if (self == nullptr)
         return 0;
     return (*self).authorId;
@@ -99,7 +99,7 @@ uint64_t Message_getAuthorId(const Message *self) {
 /**
  * Returns the associated task identity without nesting history.
  */
-uint64_t Message_getTaskId(const Message *self) {
+u64 Message_getTaskId(const Message *self) {
     if (self == nullptr)
         return 0;
     return (*self).taskId;
@@ -117,7 +117,7 @@ const char *Message_getText(const Message *self) {
 /**
  * Returns the byte count, including embedded NUL bytes; nullptr yields zero.
  */
-size_t Message_getLength(const Message *self) {
+bytes Message_getLength(const Message *self) {
     if (self == nullptr)
         return 0;
     return (*self).length;
@@ -126,7 +126,7 @@ size_t Message_getLength(const Message *self) {
 /**
  * Formats a summary without traversing or formatting the payload.
  */
-bool Message_toString(const Message *self, char *dest, size_t cap, bool *outTruncated) {
+bool Message_toString(const Message *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "message %llu (%zu bytes)",
             (unsigned long long) (*self).id, (*self).length);
@@ -136,7 +136,7 @@ bool Message_toString(const Message *self, char *dest, size_t cap, bool *outTrun
  * Formats metadata followed by escaped payload bytes. The draft length field
  * is embedded in the text label; declaration-order projection remains pending.
  */
-bool Message_toStringStruct(const Message *self, char *dest, size_t cap, bool *outTruncated) {
+bool Message_toStringStruct(const Message *self, char *dest, bytes cap, bool *outTruncated) {
     if (self == nullptr)
         return Space_format(dest, cap, outTruncated, "nullptr");
     if (!Space_format(dest, cap, outTruncated,

@@ -17,13 +17,13 @@
  * STRUCT FIELDS (Mirroring space/task.h):
  * ----------------------------------------------------------------------------
  *   Task {
- *     uint64_t id;            // work identity
- *     uint64_t channelId;     // discussion destination
- *     uint64_t requesterId;   // sender; zero denotes host
- *     uint64_t assigneeId;    // responsible persona
- *     uint64_t parentId;      // delegated parent; zero denotes root
- *     uint64_t permissions;   // host-admitted permission ceiling
- *     uint32_t state;         // queued/running/done/cancelled
+ *     u64 id;            // work identity
+ *     u64 channelId;     // discussion destination
+ *     u64 requesterId;   // sender; zero denotes host
+ *     u64 assigneeId;    // responsible persona
+ *     u64 parentId;      // delegated parent; zero denotes root
+ *     u64 permissions;   // host-admitted permission ceiling
+ *     u32 state;         // queued/running/done/cancelled
  *   }
  *
  * FUNCTION REGISTRY:
@@ -68,7 +68,7 @@ Task Task_0() {
 /**
  * Constructs a root assignment recording a host-selected permission ceiling.
  */
-Task Task_5(uint64_t id, uint64_t channelId, uint64_t requesterId, uint64_t assigneeId, uint64_t permissions) {
+Task Task_5(u64 id, u64 channelId, u64 requesterId, u64 assigneeId, u64 permissions) {
     if (id == 0 || channelId == 0 || assigneeId == 0) {
         THROW("task: invalid identity");
         return Task_0();
@@ -79,7 +79,7 @@ Task Task_5(uint64_t id, uint64_t channelId, uint64_t requesterId, uint64_t assi
 /**
  * Starts a queued task only when the actor is its assigned persona.
  */
-bool Task_start(Task *self, uint64_t actorId) {
+bool Task_start(Task *self, u64 actorId) {
     if (self == nullptr || (*self).id == 0 || actorId == 0 || actorId != (*self).assigneeId || (*self).state != TASK_QUEUED) {
         THROW("task start: rejected transition");
         return false;
@@ -91,7 +91,7 @@ bool Task_start(Task *self, uint64_t actorId) {
 /**
  * Completes running assigned work; admission alone is not completion.
  */
-bool Task_finish(Task *self, uint64_t actorId) {
+bool Task_finish(Task *self, u64 actorId) {
     if (self == nullptr || (*self).id == 0 || actorId == 0 || actorId != (*self).assigneeId || (*self).state != TASK_RUNNING) {
         THROW("task finish: rejected transition");
         return false;
@@ -116,8 +116,8 @@ bool Task_cancel(Task *self) {
  * Creates a child for a running assignee with a subset of the parent's ceiling.
  * Rejection preserves both the parent and destination.
  */
-bool Task_delegate(const Task *parent, uint64_t actorId, uint64_t id, uint64_t channelId,
-                   uint64_t assigneeId, uint64_t permissions, Task *dest) {
+bool Task_delegate(const Task *parent, u64 actorId, u64 id, u64 channelId,
+                   u64 assigneeId, u64 permissions, Task *dest) {
     if (parent == nullptr || dest == nullptr || parent == dest || (*parent).id == 0 ||
         (*parent).state != TASK_RUNNING || actorId == 0 || actorId != (*parent).assigneeId ||
         id == 0 || id == (*parent).id || channelId == 0 || assigneeId == 0 ||
@@ -132,7 +132,7 @@ bool Task_delegate(const Task *parent, uint64_t actorId, uint64_t id, uint64_t c
 /**
  * Returns the work identity, or zero for nullptr.
  */
-uint64_t Task_getId(const Task *self) {
+u64 Task_getId(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).id;
@@ -141,7 +141,7 @@ uint64_t Task_getId(const Task *self) {
 /**
  * Returns the discussion destination, or zero for nullptr.
  */
-uint64_t Task_getChannelId(const Task *self) {
+u64 Task_getChannelId(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).channelId;
@@ -150,7 +150,7 @@ uint64_t Task_getChannelId(const Task *self) {
 /**
  * Returns the requester identity; zero denotes the trusted host marker.
  */
-uint64_t Task_getRequesterId(const Task *self) {
+u64 Task_getRequesterId(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).requesterId;
@@ -159,7 +159,7 @@ uint64_t Task_getRequesterId(const Task *self) {
 /**
  * Returns the responsible persona, or zero for nullptr.
  */
-uint64_t Task_getAssigneeId(const Task *self) {
+u64 Task_getAssigneeId(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).assigneeId;
@@ -168,7 +168,7 @@ uint64_t Task_getAssigneeId(const Task *self) {
 /**
  * Returns the parent thread identity, or zero for a root/absent task.
  */
-uint64_t Task_getParentId(const Task *self) {
+u64 Task_getParentId(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).parentId;
@@ -177,7 +177,7 @@ uint64_t Task_getParentId(const Task *self) {
 /**
  * Returns the inherited permission ceiling, not external execution approval.
  */
-uint64_t Task_getPermissions(const Task *self) {
+u64 Task_getPermissions(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).permissions;
@@ -186,7 +186,7 @@ uint64_t Task_getPermissions(const Task *self) {
 /**
  * Returns the lifecycle state; queued work must not be interpreted as done.
  */
-uint32_t Task_getState(const Task *self) {
+u32 Task_getState(const Task *self) {
     if (self == nullptr)
         return 0;
     return (*self).state;
@@ -195,7 +195,7 @@ uint32_t Task_getState(const Task *self) {
 /**
  * Formats a concise work identity and lifecycle state.
  */
-bool Task_toString(const Task *self, char *dest, size_t cap, bool *outTruncated) {
+bool Task_toString(const Task *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "task %llu state=%u", (unsigned long long) (*self).id, (*self).state);
 }
@@ -203,7 +203,7 @@ bool Task_toString(const Task *self, char *dest, size_t cap, bool *outTruncated)
 /**
  * Formats all own fields in declaration order without recursive parent access.
  */
-bool Task_toStringStruct(const Task *self, char *dest, size_t cap, bool *outTruncated) {
+bool Task_toStringStruct(const Task *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated,
             "Task{id=%llu,channelId=%llu,requesterId=%llu,assigneeId=%llu,parentId=%llu,permissions=%llu,state=%u}",

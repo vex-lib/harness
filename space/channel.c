@@ -17,9 +17,9 @@
  * STRUCT FIELDS (Mirroring space/channel.h):
  * ----------------------------------------------------------------------------
  *   Channel {
- *     uint64_t id;            // discussion destination
- *     uint64_t serverId;      // owning server scope
- *     uint64_t modelUserId;   // dedicated persona
+ *     u64 id;            // discussion destination
+ *     u64 serverId;      // owning server scope
+ *     u64 modelUserId;   // dedicated persona
  *   }
  *
  * FUNCTION REGISTRY:
@@ -53,7 +53,7 @@ Channel Channel_0(void) {
 /**
  * Constructs a dedicated channel using its persona's ID in the server scope.
  */
-Channel Channel_2(uint64_t serverId, uint64_t modelUserId) {
+Channel Channel_2(u64 serverId, u64 modelUserId) {
     if (serverId == 0 || modelUserId == 0) {
         THROW("channel: invalid identity");
         return Channel_0();
@@ -64,7 +64,7 @@ Channel Channel_2(uint64_t serverId, uint64_t modelUserId) {
 /**
  * Returns the destination identity, or zero for nullptr.
  */
-uint64_t Channel_getId(const Channel *self) {
+u64 Channel_getId(const Channel *self) {
     if (self == nullptr)
         return 0;
     return (*self).id;
@@ -73,7 +73,7 @@ uint64_t Channel_getId(const Channel *self) {
 /**
  * Returns the server scope; equal IDs across servers are different channels.
  */
-uint64_t Channel_getServerId(const Channel *self) {
+u64 Channel_getServerId(const Channel *self) {
     if (self == nullptr)
         return 0;
     return (*self).serverId;
@@ -82,7 +82,7 @@ uint64_t Channel_getServerId(const Channel *self) {
 /**
  * Returns the dedicated persona identity, or zero for nullptr.
  */
-uint64_t Channel_getModelUserId(const Channel *self) {
+u64 Channel_getModelUserId(const Channel *self) {
     if (self == nullptr)
         return 0;
     return (*self).modelUserId;
@@ -91,7 +91,7 @@ uint64_t Channel_getModelUserId(const Channel *self) {
 /**
  * Formats a concise discussion destination.
  */
-bool Channel_toString(const Channel *self, char *dest, size_t cap, bool *outTruncated) {
+bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "channel %llu/%llu",
             (unsigned long long) (*self).serverId, (unsigned long long) (*self).id);
@@ -100,7 +100,7 @@ bool Channel_toString(const Channel *self, char *dest, size_t cap, bool *outTrun
 /**
  * Formats own relationship fields in declaration order.
  */
-bool Channel_toStringStruct(const Channel *self, char *dest, size_t cap, bool *outTruncated) {
+bool Channel_toStringStruct(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "Channel{id=%llu,serverId=%llu,modelUserId=%llu}",
             (unsigned long long) (*self).id, (unsigned long long) (*self).serverId,

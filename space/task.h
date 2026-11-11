@@ -14,40 +14,40 @@
 #define TASK_CANCELLED 4u
 
 typedef struct Task {
-    uint64_t id;
-    uint64_t channelId;
-    uint64_t requesterId;
-    uint64_t assigneeId;
-    uint64_t parentId;
-    uint64_t permissions;
-    uint32_t state;
+    u64 id;
+    u64 channelId;
+    u64 requesterId;
+    u64 assigneeId;
+    u64 parentId;
+    u64 permissions;
+    u32 state;
 } Task;
 
 Task Task_0(void);
-Task Task_5(uint64_t id, uint64_t channelId, uint64_t requesterId, uint64_t assigneeId, uint64_t permissions);
+Task Task_5(u64 id, u64 channelId, u64 requesterId, u64 assigneeId, u64 permissions);
 
 #define Task(...) SPACE_CONSTRUCT(Task, __VA_ARGS__)
 #define Task_zero() Task_0()
 
-bool Task_start(Task *self, uint64_t actorId);
-bool Task_finish(Task *self, uint64_t actorId);
+bool Task_start(Task *self, u64 actorId);
+bool Task_finish(Task *self, u64 actorId);
 
 /**
  * Cancellation is host-only admission; the caller must enforce host authority.
  */
 bool Task_cancel(Task *self);
-bool Task_delegate(const Task *parent, uint64_t actorId, uint64_t id, uint64_t channelId,
-                   uint64_t assigneeId, uint64_t permissions, Task *dest);
+bool Task_delegate(const Task *parent, u64 actorId, u64 id, u64 channelId,
+                   u64 assigneeId, u64 permissions, Task *dest);
 
-uint64_t Task_getId(const Task *self);
-uint64_t Task_getChannelId(const Task *self);
-uint64_t Task_getRequesterId(const Task *self);
-uint64_t Task_getAssigneeId(const Task *self);
-uint64_t Task_getParentId(const Task *self);
-uint64_t Task_getPermissions(const Task *self);
-uint32_t Task_getState(const Task *self);
+u64 Task_getId(const Task *self);
+u64 Task_getChannelId(const Task *self);
+u64 Task_getRequesterId(const Task *self);
+u64 Task_getAssigneeId(const Task *self);
+u64 Task_getParentId(const Task *self);
+u64 Task_getPermissions(const Task *self);
+u32 Task_getState(const Task *self);
 
-bool Task_toString(const Task *self, char *dest, size_t cap, bool *outTruncated);
-bool Task_toStringStruct(const Task *self, char *dest, size_t cap, bool *outTruncated);
+bool Task_toString(const Task *self, char *dest, bytes cap, bool *outTruncated);
+bool Task_toStringStruct(const Task *self, char *dest, bytes cap, bool *outTruncated);
 
 #endif

@@ -17,9 +17,9 @@
  * STRUCT FIELDS (Mirroring space/model_user.h):
  * ----------------------------------------------------------------------------
  *   ModelUser {
- *     uint64_t id;                          // host-assigned identity
+ *     u64 id;                          // host-assigned identity
  *     char name[MODEL_USER_NAME_CAP];       // copied mention handle
- *     uint64_t modelId;                     // selected model metadata
+ *     u64 modelId;                     // selected model metadata
  *   }
  *
  * FUNCTION REGISTRY:
@@ -58,7 +58,7 @@ ModelUser ModelUser_0(void) {
 /**
  * Constructs a complete persona, copying the handle only after validation.
  */
-ModelUser ModelUser_3(uint64_t id, const char *name, uint64_t modelId) {
+ModelUser ModelUser_3(u64 id, const char *name, u64 modelId) {
     if (id == 0 || modelId == 0 || !Space_nameValid(name)) {
         THROW("model user: invalid identity");
         return ModelUser_0();
@@ -85,7 +85,7 @@ bool ModelUser_setName(ModelUser *self, const char *name) {
 /**
  * Updates model metadata; zero is never a usable model binding.
  */
-bool ModelUser_setModelId(ModelUser *self, uint64_t modelId) {
+bool ModelUser_setModelId(ModelUser *self, u64 modelId) {
     if (self == nullptr || modelId == 0) {
         THROW("model user model: invalid input");
         return false;
@@ -97,7 +97,7 @@ bool ModelUser_setModelId(ModelUser *self, uint64_t modelId) {
 /**
  * Returns the persona identity, or zero for nullptr.
  */
-uint64_t ModelUser_getId(const ModelUser *self) {
+u64 ModelUser_getId(const ModelUser *self) {
     if (self == nullptr)
         return 0;
     return (*self).id;
@@ -115,7 +115,7 @@ const char *ModelUser_getName(const ModelUser *self) {
 /**
  * Returns host model metadata, not provider capabilities; nullptr yields zero.
  */
-uint64_t ModelUser_getModelId(const ModelUser *self) {
+u64 ModelUser_getModelId(const ModelUser *self) {
     if (self == nullptr)
         return 0;
     return (*self).modelId;
@@ -124,7 +124,7 @@ uint64_t ModelUser_getModelId(const ModelUser *self) {
 /**
  * Formats the mention spelling; validated handles require no escaping.
  */
-bool ModelUser_toString(const ModelUser *self, char *dest, size_t cap, bool *outTruncated) {
+bool ModelUser_toString(const ModelUser *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "@%s", (*self).name);
 }
@@ -132,7 +132,7 @@ bool ModelUser_toString(const ModelUser *self, char *dest, size_t cap, bool *out
 /**
  * Formats own fields in declaration order without model/provider traversal.
  */
-bool ModelUser_toStringStruct(const ModelUser *self, char *dest, size_t cap, bool *outTruncated) {
+bool ModelUser_toStringStruct(const ModelUser *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "ModelUser{id=%llu,name=\"%s\",modelId=%llu}",
             (unsigned long long) (*self).id, (*self).name, (unsigned long long) (*self).modelId);
