@@ -1,14 +1,11 @@
 #ifndef HARNESS_SPACE_SUPPORT_H
 #define HARNESS_SPACE_SUPPORT_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include "vex.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 
-#include "exception/throw.h"
-#include "annotation/annotation.h"
 /**
  * Header-only cold support. Constructor counting supports 0..8; unsupported
  * forms deliberately name an undeclared Class_N and fail client compilation.

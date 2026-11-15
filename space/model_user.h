@@ -1,6 +1,7 @@
 #ifndef HARNESS_SPACE_MODEL_USER_H
 #define HARNESS_SPACE_MODEL_USER_H
 
+#include "vex.h"
 #include "space/support.h"
 
 /**

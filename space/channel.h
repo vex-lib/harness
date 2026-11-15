@@ -1,6 +1,7 @@
 #ifndef HARNESS_SPACE_CHANNEL_H
 #define HARNESS_SPACE_CHANNEL_H
 
+#include "vex.h"
 #include "space/support.h"
 
 /**

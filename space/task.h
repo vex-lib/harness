@@ -1,6 +1,7 @@
 #ifndef HARNESS_SPACE_TASK_H
 #define HARNESS_SPACE_TASK_H
 
+#include "vex.h"
 #include "space/support.h"
 
 /**

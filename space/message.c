@@ -1,3 +1,4 @@
+#include "vex.h"
 #include "space/message.h"
 
 ;;DEFINITION
