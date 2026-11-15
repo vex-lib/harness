@@ -31,7 +31,7 @@ static inline bool Space_nameValid(const char *name) {
     if (name == nullptr || name[0] == '\0')
         return false;
     for (bytes i = 0; i < MODEL_USER_NAME_CAP; ++i) {
-        unsigned char c = (unsigned char) name[i];
+        u8 c = (u8) name[i];
         if (c == 0)
             return true;
         if (!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_' || c == '-'))
@@ -54,7 +54,7 @@ static inline bool Space_format(char *dest, bytes cap, bool *outTruncated, const
     }
     va_list args;
     va_start(args, format);
-    int n = vsnprintf(dest, cap, format, args);
+    i32 n = vsnprintf(dest, cap, format, args);
     va_end(args);
     if (n < 0 || (bytes) n >= cap) {
         if (outTruncated != nullptr)
@@ -75,7 +75,7 @@ static inline bool Space_quote(const char *text, bytes length, char *dest, bytes
     bytes at = strlen(dest);
     bool cut = false;
     for (bytes i = 0; i < length; ++i) {
-        unsigned char c = (unsigned char) text[i];
+        u8 c = (u8) text[i];
         char escaped[4];
         bytes n = 1;
         escaped[0] = (char) c;

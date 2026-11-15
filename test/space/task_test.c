@@ -13,7 +13,7 @@
 
 #include "space/task.h"
 
-static int g_failures = 0;
+static i32 g_failures = 0;
 
 #define CHECK(name, cond) do { \
     if (cond) { printf("[task] PASS %s\n", name); } \
@@ -24,7 +24,7 @@ static int g_failures = 0;
 #define PERM_WRITE 2u
 #define PERM_ADMIN 4u
 
-int main() {
+i32 main() {
     printf("=== Task owner suite ===\n");
 
     Task zero = Task_0();

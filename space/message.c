@@ -130,7 +130,7 @@ bytes Message_getLength(const Message *self) {
 bool Message_toString(const Message *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "message %llu (%zu bytes)",
-            (unsigned long long) (*self).id, (*self).length);
+            (u64) (*self).id, (*self).length);
 }
 
 /**
@@ -142,8 +142,8 @@ bool Message_toStringStruct(const Message *self, char *dest, bytes cap, bool *ou
         return Space_format(dest, cap, outTruncated, "nullptr");
     if (!Space_format(dest, cap, outTruncated,
         "Message{id=%llu,channelId=%llu,authorId=%llu,taskId=%llu,text[length=%zu]=\"",
-        (unsigned long long) (*self).id, (unsigned long long) (*self).channelId,
-        (unsigned long long) (*self).authorId, (unsigned long long) (*self).taskId, (*self).length))
+        (u64) (*self).id, (u64) (*self).channelId,
+        (u64) (*self).authorId, (u64) (*self).taskId, (*self).length))
         return false;
     return Space_quote((*self).text, (*self).length, dest, cap, outTruncated);
 }

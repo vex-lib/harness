@@ -136,5 +136,5 @@ bool ModelUser_toString(const ModelUser *self, char *dest, bytes cap, bool *outT
 bool ModelUser_toStringStruct(const ModelUser *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "ModelUser{id=%llu,name=\"%s\",modelId=%llu}",
-            (unsigned long long) (*self).id, (*self).name, (unsigned long long) (*self).modelId);
+            (u64) (*self).id, (*self).name, (u64) (*self).modelId);
 }

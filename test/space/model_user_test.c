@@ -13,7 +13,7 @@
 
 #include "space/model_user.h"
 
-static int g_failures = 0;
+static i32 g_failures = 0;
 
 #define CHECK(name, cond) do { \
     if (cond) { printf("[model_user] PASS %s\n", name); } \
@@ -29,7 +29,7 @@ static bool isZeroUser(ModelUser v) {
     return v.id == 0 && v.modelId == 0 && v.name[0] == '\0';
 }
 
-int main() {
+i32 main() {
     printf("=== ModelUser owner suite ===\n");
     const char *n23 = "aaaaaaaaaaaaaaaaaaaaaaa";   /* 23 chars: the extent  */
 

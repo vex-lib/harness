@@ -198,7 +198,7 @@ u32 Task_getState(const Task *self) {
  */
 bool Task_toString(const Task *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
-        Space_format(dest, cap, outTruncated, "task %llu state=%u", (unsigned long long) (*self).id, (*self).state);
+        Space_format(dest, cap, outTruncated, "task %llu state=%u", (u64) (*self).id, (*self).state);
 }
 
 /**
@@ -208,7 +208,7 @@ bool Task_toStringStruct(const Task *self, char *dest, bytes cap, bool *outTrunc
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated,
             "Task{id=%llu,channelId=%llu,requesterId=%llu,assigneeId=%llu,parentId=%llu,permissions=%llu,state=%u}",
-            (unsigned long long) (*self).id, (unsigned long long) (*self).channelId,
-            (unsigned long long) (*self).requesterId, (unsigned long long) (*self).assigneeId,
-            (unsigned long long) (*self).parentId, (unsigned long long) (*self).permissions, (*self).state);
+            (u64) (*self).id, (u64) (*self).channelId,
+            (u64) (*self).requesterId, (u64) (*self).assigneeId,
+            (u64) (*self).parentId, (u64) (*self).permissions, (*self).state);
 }

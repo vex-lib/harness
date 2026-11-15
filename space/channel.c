@@ -95,7 +95,7 @@ u64 Channel_getModelUserId(const Channel *self) {
 bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "channel %llu/%llu",
-            (unsigned long long) (*self).serverId, (unsigned long long) (*self).id);
+            (u64) (*self).serverId, (u64) (*self).id);
 }
 
 /**
@@ -104,6 +104,6 @@ bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTrunc
 bool Channel_toStringStruct(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "Channel{id=%llu,serverId=%llu,modelUserId=%llu}",
-            (unsigned long long) (*self).id, (unsigned long long) (*self).serverId,
-            (unsigned long long) (*self).modelUserId);
+            (u64) (*self).id, (u64) (*self).serverId,
+            (u64) (*self).modelUserId);
 }

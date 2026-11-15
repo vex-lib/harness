@@ -14,7 +14,7 @@
 
 #include "space/support.h"
 
-static int g_failures = 0;
+static i32 g_failures = 0;
 
 #define CHECK(name, cond) do { \
     if (cond) { printf("[support] PASS %s\n", name); } \
@@ -30,13 +30,13 @@ _Static_assert(A0 == 0 && A1 == 1 && A2 == 2 && A3 == 3 && A4 == 4 &&
                A5 == 5 && A6 == 6 && A7 == 7 && A8 == 8, "arity counter must rank 0..8");
 
 /* A local class proves SPACE_CONSTRUCT dispatches to Class_N by argument count. */
-typedef struct Probe { int sum; } Probe;
+typedef struct Probe { i32 sum; } Probe;
 static Probe Probe_0() { return (Probe) { 0 }; }
-static Probe Probe_2(int a, int b) { return (Probe) { a + b }; }
-static Probe Probe_3(int a, int b, int c) { return (Probe) { a + b + c }; }
+static Probe Probe_2(i32 a, i32 b) { return (Probe) { a + b }; }
+static Probe Probe_3(i32 a, i32 b, i32 c) { return (Probe) { a + b + c }; }
 #define Probe(...) SPACE_CONSTRUCT(Probe, __VA_ARGS__)
 
-int main() {
+i32 main() {
     printf("=== Space support owner suite ===\n");
 
     CHECK("chooser 0 args -> Probe_0", Probe().sum == 0);

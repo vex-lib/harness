@@ -13,14 +13,14 @@
 
 #include "space/message.h"
 
-static int g_failures = 0;
+static i32 g_failures = 0;
 
 #define CHECK(name, cond) do { \
     if (cond) { printf("[message] PASS %s\n", name); } \
     else { printf("[message] FAIL %s\n", name); g_failures++; } \
 } while (0)
 
-int main() {
+i32 main() {
     printf("=== Message owner suite ===\n");
 
     Message zero = Message_0();
