@@ -51,7 +51,7 @@
 /**
  * Returns an empty identity with no registered model or handle.
  */
-ModelUser ModelUser_0(void) {
+ModelUser ModelUser_0() {
     return (ModelUser) {0};
 }
 

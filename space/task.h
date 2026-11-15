@@ -23,7 +23,7 @@ typedef struct Task {
     u32 state;
 } Task;
 
-Task Task_0(void);
+Task Task_0();
 Task Task_5(u64 id, u64 channelId, u64 requesterId, u64 assigneeId, u64 permissions);
 
 #define Task(...) SPACE_CONSTRUCT(Task, __VA_ARGS__)

@@ -18,7 +18,7 @@ typedef struct Message {
     bytes length;
 } Message;
 
-Message Message_0(void);
+Message Message_0();
 Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, const char *text, bytes length);
 
 #define Message(...) SPACE_CONSTRUCT(Message, __VA_ARGS__)

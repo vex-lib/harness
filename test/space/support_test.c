@@ -5,6 +5,8 @@
  * rejection paths deliberately emit their [vex] THROW diagnostic.
  * Caller serializes access; these helpers touch no shared state.
  */
+
+#include "vex.h"
 #include "test_support.h"
 
 #include <stdio.h>
@@ -29,12 +31,12 @@ _Static_assert(A0 == 0 && A1 == 1 && A2 == 2 && A3 == 3 && A4 == 4 &&
 
 /* A local class proves SPACE_CONSTRUCT dispatches to Class_N by argument count. */
 typedef struct Probe { int sum; } Probe;
-static Probe Probe_0(void) { return (Probe) { 0 }; }
+static Probe Probe_0() { return (Probe) { 0 }; }
 static Probe Probe_2(int a, int b) { return (Probe) { a + b }; }
 static Probe Probe_3(int a, int b, int c) { return (Probe) { a + b + c }; }
 #define Probe(...) SPACE_CONSTRUCT(Probe, __VA_ARGS__)
 
-int main(void) {
+int main() {
     printf("=== Space support owner suite ===\n");
 
     CHECK("chooser 0 args -> Probe_0", Probe().sum == 0);

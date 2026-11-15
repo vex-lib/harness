@@ -4,9 +4,10 @@
  * emit the [vex] diagnostic and return the empty value / false (the Contract
  * Before Cases Law: invalid input never mutates live state).
  */
+
+#include "vex.h"
 #include "test_support.h"
 
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -28,7 +29,7 @@ static bool isZeroUser(ModelUser v) {
     return v.id == 0 && v.modelId == 0 && v.name[0] == '\0';
 }
 
-int main(void) {
+int main() {
     printf("=== ModelUser owner suite ===\n");
     const char *n23 = "aaaaaaaaaaaaaaaaaaaaaaa";   /* 23 chars: the extent  */
 

@@ -4,9 +4,10 @@
  * preservation for both parent and destination. Delegation never mutates the
  * parent and never broadens permissions.
  */
+
+#include "vex.h"
 #include "test_support.h"
 
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -23,7 +24,7 @@ static int g_failures = 0;
 #define PERM_WRITE 2u
 #define PERM_ADMIN 4u
 
-int main(void) {
+int main() {
     printf("=== Task owner suite ===\n");
 
     Task zero = Task_0();

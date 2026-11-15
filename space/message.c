@@ -54,7 +54,7 @@
 /**
  * Returns an empty event, not an admissible server-history entry.
  */
-Message Message_0(void) {
+Message Message_0() {
     return (Message) {0};
 }
 

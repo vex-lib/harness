@@ -46,7 +46,7 @@
 /**
  * Returns an empty channel, not an admitted discussion destination.
  */
-Channel Channel_0(void) {
+Channel Channel_0() {
     return (Channel) {0};
 }
 

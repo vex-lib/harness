@@ -38,7 +38,7 @@ def syntax_check(body):
 class ArityCompileTest(unittest.TestCase):
     def test_supported_constructor_forms_compile(self):
         positive = (
-            "int main(void){"
+            "int main(){"
             " ModelUser a = ModelUser();"
             " ModelUser b = ModelUser(1,\"vex\",2);"
             " ModelUser c = ModelUser_3(1,\"vex\",2);"
@@ -54,26 +54,26 @@ class ArityCompileTest(unittest.TestCase):
     def test_unsupported_arity_names_the_declared_symbol(self):
         # (call, the undeclared Class_N the chooser must select)
         cases = [
-            ("(void) ModelUser(1,2);", "ModelUser_2"),
-            ("(void) ModelUser(1,2,3,4);", "ModelUser_4"),
-            ("(void) Channel(1);", "Channel_1"),
-            ("(void) Channel(1,2,3);", "Channel_3"),
-            ("(void) Message(1,2,3);", "Message_3"),
-            ("(void) Message(1,2,3,4,5);", "Message_5"),
-            ("(void) Task(1,2,3);", "Task_3"),
-            ("(void) Task(1,2,3,4,5,6);", "Task_6"),
+            ("() ModelUser(1,2);", "ModelUser_2"),
+            ("() ModelUser(1,2,3,4);", "ModelUser_4"),
+            ("() Channel(1);", "Channel_1"),
+            ("() Channel(1,2,3);", "Channel_3"),
+            ("() Message(1,2,3);", "Message_3"),
+            ("() Message(1,2,3,4,5);", "Message_5"),
+            ("() Task(1,2,3);", "Task_3"),
+            ("() Task(1,2,3,4,5,6);", "Task_6"),
         ]
         for expr, symbol in cases:
             with self.subTest(expr=expr):
-                ok, diag = syntax_check(f"int main(void){{ {expr} return 0; }}")
+                ok, diag = syntax_check(f"int main(){{ {expr} return 0; }}")
                 self.assertFalse(ok, f"{expr} unexpectedly compiled")
                 self.assertIn(symbol, diag, diag)
 
     def test_wrong_argument_types_are_rejected(self):
-        for expr in ("(void) ModelUser(1, 2, 3);",          # int where const char* is required
-                     "(void) Channel(\"x\", 2);"):          # string where u64 is required
+        for expr in ("() ModelUser(1, 2, 3);",          # int where const char* is required
+                     "() Channel(\"x\", 2);"):          # string where u64 is required
             with self.subTest(expr=expr):
-                ok, _ = syntax_check(f"int main(void){{ {expr} return 0; }}")
+                ok, _ = syntax_check(f"int main(){{ {expr} return 0; }}")
                 self.assertFalse(ok, f"{expr} unexpectedly compiled")
 
 

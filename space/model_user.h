@@ -14,7 +14,7 @@ typedef struct ModelUser {
     u64 modelId;
 } ModelUser;
 
-ModelUser ModelUser_0(void);
+ModelUser ModelUser_0();
 ModelUser ModelUser_3(u64 id, const char *name, u64 modelId);
 
 #define ModelUser(...) SPACE_CONSTRUCT(ModelUser, __VA_ARGS__)

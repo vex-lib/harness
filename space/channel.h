@@ -14,7 +14,7 @@ typedef struct Channel {
     u64 modelUserId;
 } Channel;
 
-Channel Channel_0(void);
+Channel Channel_0();
 Channel Channel_2(u64 serverId, u64 modelUserId);
 
 #define Channel(...) SPACE_CONSTRUCT(Channel, __VA_ARGS__)

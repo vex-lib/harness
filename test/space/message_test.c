@@ -4,10 +4,10 @@
  * projections with escaping. Rejection returns the empty event and never
  * touches the payload; retention stays the caller's contract.
  */
+
+#include "vex.h"
 #include "test_support.h"
 
-#include <stddef.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -20,7 +20,7 @@ static int g_failures = 0;
     else { printf("[message] FAIL %s\n", name); g_failures++; } \
 } while (0)
 
-int main(void) {
+int main() {
     printf("=== Message owner suite ===\n");
 
     Message zero = Message_0();

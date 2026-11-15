@@ -3,9 +3,10 @@
  * constructor forms, null-safe getters and bounded projections. Invalid
  * construction returns the empty channel.
  */
+
+#include "vex.h"
 #include "test_support.h"
 
-#include <stdint.h>
 #include <stdio.h>
 
 #include "space/channel.h"
@@ -17,7 +18,7 @@ static int g_failures = 0;
     else { printf("[channel] FAIL %s\n", name); g_failures++; } \
 } while (0)
 
-int main(void) {
+int main() {
     printf("=== Channel owner suite ===\n");
 
     Channel zero = Channel_0();
