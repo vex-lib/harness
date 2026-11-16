@@ -73,6 +73,7 @@ Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, const char *t
 /**
  * Returns the immutable event identity, or zero for nullptr.
  */
+;;GETTER
 u64 Message_getId(const Message *self) {
     if (self == nullptr)
         return 0;
@@ -82,6 +83,7 @@ u64 Message_getId(const Message *self) {
 /**
  * Returns the destination identity without following a pointer chain.
  */
+;;GETTER
 u64 Message_getChannelId(const Message *self) {
     if (self == nullptr)
         return 0;
@@ -91,6 +93,7 @@ u64 Message_getChannelId(const Message *self) {
 /**
  * Returns the sender identity; zero is a host marker, not authentication proof.
  */
+;;GETTER
 u64 Message_getAuthorId(const Message *self) {
     if (self == nullptr)
         return 0;
@@ -100,6 +103,7 @@ u64 Message_getAuthorId(const Message *self) {
 /**
  * Returns the associated task identity without nesting history.
  */
+;;GETTER
 u64 Message_getTaskId(const Message *self) {
     if (self == nullptr)
         return 0;
@@ -109,6 +113,7 @@ u64 Message_getTaskId(const Message *self) {
 /**
  * Returns borrowed text, valid only under the caller's retention contract.
  */
+;;GETTER
 const char *Message_getText(const Message *self) {
     if (self == nullptr)
         return nullptr;
@@ -118,6 +123,7 @@ const char *Message_getText(const Message *self) {
 /**
  * Returns the byte count, including embedded NUL bytes; nullptr yields zero.
  */
+;;GETTER
 bytes Message_getLength(const Message *self) {
     if (self == nullptr)
         return 0;
@@ -130,7 +136,7 @@ bytes Message_getLength(const Message *self) {
 bool Message_toString(const Message *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "message %llu (%zu bytes)",
-            (u64) (*self).id, (*self).length);
+            (u64) Message_getId(self), Message_getLength(self));
 }
 
 /**
@@ -142,8 +148,8 @@ bool Message_toStringStruct(const Message *self, char *dest, bytes cap, bool *ou
         return Space_format(dest, cap, outTruncated, "nullptr");
     if (!Space_format(dest, cap, outTruncated,
         "Message{id=%llu,channelId=%llu,authorId=%llu,taskId=%llu,text[length=%zu]=\"",
-        (u64) (*self).id, (u64) (*self).channelId,
-        (u64) (*self).authorId, (u64) (*self).taskId, (*self).length))
+        (u64) Message_getId(self), (u64) Message_getChannelId(self),
+        (u64) Message_getAuthorId(self), (u64) Message_getTaskId(self), Message_getLength(self)))
         return false;
-    return Space_quote((*self).text, (*self).length, dest, cap, outTruncated);
+    return Space_quote(Message_getText(self), Message_getLength(self), dest, cap, outTruncated);
 }

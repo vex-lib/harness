@@ -65,6 +65,7 @@ Channel Channel_2(u64 serverId, u64 modelUserId) {
 /**
  * Returns the destination identity, or zero for nullptr.
  */
+;;GETTER
 u64 Channel_getId(const Channel *self) {
     if (self == nullptr)
         return 0;
@@ -74,6 +75,7 @@ u64 Channel_getId(const Channel *self) {
 /**
  * Returns the server scope; equal IDs across servers are different channels.
  */
+;;GETTER
 u64 Channel_getServerId(const Channel *self) {
     if (self == nullptr)
         return 0;
@@ -83,6 +85,7 @@ u64 Channel_getServerId(const Channel *self) {
 /**
  * Returns the dedicated persona identity, or zero for nullptr.
  */
+;;GETTER
 u64 Channel_getModelUserId(const Channel *self) {
     if (self == nullptr)
         return 0;
@@ -95,7 +98,7 @@ u64 Channel_getModelUserId(const Channel *self) {
 bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "channel %llu/%llu",
-            (u64) (*self).serverId, (u64) (*self).id);
+            (u64) Channel_getServerId(self), (u64) Channel_getId(self));
 }
 
 /**
@@ -104,6 +107,6 @@ bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTrunc
 bool Channel_toStringStruct(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "Channel{id=%llu,serverId=%llu,modelUserId=%llu}",
-            (u64) (*self).id, (u64) (*self).serverId,
-            (u64) (*self).modelUserId);
+            (u64) Channel_getId(self), (u64) Channel_getServerId(self),
+            (u64) Channel_getModelUserId(self));
 }

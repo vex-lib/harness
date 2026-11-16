@@ -21,8 +21,9 @@ static i32 g_failures = 0;
 } while (0)
 
 static bool sameUser(const ModelUser *a, const ModelUser *b) {
-    return (*a).id == (*b).id && (*a).modelId == (*b).modelId &&
-           memcmp((*a).name, (*b).name, MODEL_USER_NAME_CAP) == 0;
+    return ModelUser_getId(a) == ModelUser_getId(b) &&
+           ModelUser_getModelId(a) == ModelUser_getModelId(b) &&
+           memcmp(ModelUser_getName(a), ModelUser_getName(b), MODEL_USER_NAME_CAP) == 0;
 }
 
 static bool isZeroUser(ModelUser v) {

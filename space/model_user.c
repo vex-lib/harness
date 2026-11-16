@@ -72,6 +72,10 @@ ModelUser ModelUser_3(u64 id, const char *name, u64 modelId) {
 /**
  * Rejects an invalid name without changing the copied identity.
  */
+;;GETTER
+static inline char *ModelUser_nameMut(ModelUser *self) { return (*self).name; }
+
+;;SETTER
 bool ModelUser_setName(ModelUser *self, const char *name) {
     if (self == nullptr || !Space_nameValid(name)) {
         THROW("model user name: invalid input");
@@ -79,7 +83,7 @@ bool ModelUser_setName(ModelUser *self, const char *name) {
     }
     char copy[MODEL_USER_NAME_CAP] = {0};
     memcpy(copy, name, strlen(name) + 1);
-    memcpy((*self).name, copy, sizeof(copy));
+    memcpy(ModelUser_nameMut(self), copy, sizeof(copy));
     return true;
 }
 
@@ -98,6 +102,7 @@ bool ModelUser_setModelId(ModelUser *self, u64 modelId) {
 /**
  * Returns the persona identity, or zero for nullptr.
  */
+;;GETTER
 u64 ModelUser_getId(const ModelUser *self) {
     if (self == nullptr)
         return 0;
@@ -107,6 +112,7 @@ u64 ModelUser_getId(const ModelUser *self) {
 /**
  * Returns the borrowed mention handle, or nullptr for an absent persona.
  */
+;;GETTER
 const char *ModelUser_getName(const ModelUser *self) {
     if (self == nullptr)
         return nullptr;
@@ -116,6 +122,7 @@ const char *ModelUser_getName(const ModelUser *self) {
 /**
  * Returns host model metadata, not provider capabilities; nullptr yields zero.
  */
+;;GETTER
 u64 ModelUser_getModelId(const ModelUser *self) {
     if (self == nullptr)
         return 0;
@@ -127,7 +134,7 @@ u64 ModelUser_getModelId(const ModelUser *self) {
  */
 bool ModelUser_toString(const ModelUser *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
-        Space_format(dest, cap, outTruncated, "@%s", (*self).name);
+        Space_format(dest, cap, outTruncated, "@%s", ModelUser_getName(self));
 }
 
 /**
@@ -136,5 +143,5 @@ bool ModelUser_toString(const ModelUser *self, char *dest, bytes cap, bool *outT
 bool ModelUser_toStringStruct(const ModelUser *self, char *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "ModelUser{id=%llu,name=\"%s\",modelId=%llu}",
-            (u64) (*self).id, (*self).name, (u64) (*self).modelId);
+            (u64) ModelUser_getId(self), ModelUser_getName(self), (u64) ModelUser_getModelId(self));
 }
