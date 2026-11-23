@@ -1,4 +1,4 @@
-# harness — Repo-Local Living Preferences
+# harness, Repo-Local Living Preferences
 
 ## Constitution Link
 
@@ -32,11 +32,11 @@ Tier: core (agent interface). Owns: agent policy, history and interface state. B
 
 ## Repo-Local Extensions
 
-* None — no managed exceptions to universal laws.
+* None, no managed exceptions to universal laws.
 
 ## Readiness Cross-Reference
 
 * Feature readiness: harness readiness gist.
 * Open blockers: ecosystem blockers gist.
-* Proof lawbook: `tests/test-preferences.md` — `./tools/prefs test "<title>"`.
-* Evidence ledger: `metadata/gists/test-checklist.md` — `python3 tools/test_checklist.py check`.
+* Proof lawbook: `tests/test-preferences.md`, `./tools/prefs test "<title>"`.
+* Evidence ledger: `metadata/gists/test-checklist.md`, `python3 tools/test_checklist.py check`.

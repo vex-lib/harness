@@ -2,7 +2,7 @@
 
 This project is a strictly solo development process conducted in tight pair-programming partnership with an AI coding assistant.
 
-It serves as an architectural manifesto for the **R4 agent interface**: the user's own agent, integrated with this ecosystem — operating the user's projects, external tools and R5 applications, driving `api-haven`'s connectors as-is, and composing compile-time `func` orchestration, presented through `darling-framework`.
+It serves as an architectural manifesto for the **R4 agent interface**: the user's own agent, integrated with this ecosystem, operating the user's projects, external tools and R5 applications, driving `api-haven`'s connectors as-is, and composing compile-time `func` orchestration, presented through `darling-framework`.
 
 ---
 
