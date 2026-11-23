@@ -95,7 +95,7 @@ u64 Channel_getModelUserId(const Channel *self) {
 /**
  * Formats a concise discussion destination.
  */
-bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
+bool Channel_toString(const Channel *self, utf8 *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "channel %llu/%llu",
             (u64) Channel_getServerId(self), (u64) Channel_getId(self));
@@ -104,7 +104,7 @@ bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTrunc
 /**
  * Formats own relationship fields in declaration order.
  */
-bool Channel_toStringStruct(const Channel *self, char *dest, bytes cap, bool *outTruncated) {
+bool Channel_toStringStruct(const Channel *self, utf8 *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "Channel{id=%llu,serverId=%llu,modelUserId=%llu}",
             (u64) Channel_getId(self), (u64) Channel_getServerId(self),

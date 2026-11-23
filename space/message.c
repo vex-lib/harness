@@ -22,7 +22,7 @@
  *     u64 channelId;    // discussion route
  *     u64 authorId;     // sender; zero denotes host
  *     u64 taskId;       // thread; zero denotes ordinary discussion
- *     const char *text;      // borrowed immutable bytes
+ *     string text;      // borrowed immutable bytes
  *     bytes length;         // payload byte extent
  *   }
  *
@@ -62,7 +62,7 @@ Message Message_0() {
 /**
  * Admits live immutable text with representable length, without copy/decoding.
  */
-Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, const char *text, bytes length) {
+Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, string text, bytes length) {
     if (id == 0 || channelId == 0 || text == nullptr || length == 0 || length > PTRDIFF_MAX) {
         THROW("message: invalid input");
         return Message_0();
@@ -114,7 +114,7 @@ u64 Message_getTaskId(const Message *self) {
  * Returns borrowed text, valid only under the caller's retention contract.
  */
 ;;GETTER
-const char *Message_getText(const Message *self) {
+string Message_getText(const Message *self) {
     if (self == nullptr)
         return nullptr;
     return (*self).text;
@@ -133,7 +133,7 @@ bytes Message_getLength(const Message *self) {
 /**
  * Formats a summary without traversing or formatting the payload.
  */
-bool Message_toString(const Message *self, char *dest, bytes cap, bool *outTruncated) {
+bool Message_toString(const Message *self, utf8 *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "message %llu (%zu bytes)",
             (u64) Message_getId(self), Message_getLength(self));
@@ -143,7 +143,7 @@ bool Message_toString(const Message *self, char *dest, bytes cap, bool *outTrunc
  * Formats metadata followed by escaped payload bytes. The draft length field
  * is embedded in the text label; declaration-order projection remains pending.
  */
-bool Message_toStringStruct(const Message *self, char *dest, bytes cap, bool *outTruncated) {
+bool Message_toStringStruct(const Message *self, utf8 *dest, bytes cap, bool *outTruncated) {
     if (self == nullptr)
         return Space_format(dest, cap, outTruncated, "nullptr");
     if (!Space_format(dest, cap, outTruncated,

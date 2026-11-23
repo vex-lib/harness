@@ -48,7 +48,7 @@ u64 Task_getParentId(const Task *self);
 u64 Task_getPermissions(const Task *self);
 u32 Task_getState(const Task *self);
 
-bool Task_toString(const Task *self, char *dest, bytes cap, bool *outTruncated);
-bool Task_toStringStruct(const Task *self, char *dest, bytes cap, bool *outTruncated);
+bool Task_toString(const Task *self, utf8 *dest, bytes cap, bool *outTruncated);
+bool Task_toStringStruct(const Task *self, utf8 *dest, bytes cap, bool *outTruncated);
 
 #endif

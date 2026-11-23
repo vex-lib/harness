@@ -208,7 +208,7 @@ u32 Task_getState(const Task *self) {
 /**
  * Formats a concise work identity and lifecycle state.
  */
-bool Task_toString(const Task *self, char *dest, bytes cap, bool *outTruncated) {
+bool Task_toString(const Task *self, utf8 *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated, "task %llu state=%u", (u64) Task_getId(self), Task_getState(self));
 }
@@ -216,7 +216,7 @@ bool Task_toString(const Task *self, char *dest, bytes cap, bool *outTruncated) 
 /**
  * Formats all own fields in declaration order without recursive parent access.
  */
-bool Task_toStringStruct(const Task *self, char *dest, bytes cap, bool *outTruncated) {
+bool Task_toStringStruct(const Task *self, utf8 *dest, bytes cap, bool *outTruncated) {
     return self == nullptr ? Space_format(dest, cap, outTruncated, "nullptr") :
         Space_format(dest, cap, outTruncated,
             "Task{id=%llu,channelId=%llu,requesterId=%llu,assigneeId=%llu,parentId=%llu,permissions=%llu,state=%u}",

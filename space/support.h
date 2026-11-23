@@ -27,7 +27,7 @@
 /**
  * Validates bounded ASCII handles, without '@' in the stored identity.
  */
-static inline bool Space_nameValid(const char *name) {
+static inline bool Space_nameValid(string name) {
     if (name == nullptr || name[0] == '\0')
         return false;
     for (bytes i = 0; i < MODEL_USER_NAME_CAP; ++i) {
@@ -43,7 +43,7 @@ static inline bool Space_nameValid(const char *name) {
 /**
  * Formats cold metadata, reporting one diagnostic on rejection/truncation.
  */
-static inline bool Space_format(char *dest, bytes cap, bool *outTruncated, const char *format, ...) {
+static inline bool Space_format(utf8 *dest, bytes cap, bool *outTruncated, string format, ...) {
     if (outTruncated != nullptr)
         *outTruncated = false;
     if (dest == nullptr || cap == 0) {
@@ -70,18 +70,18 @@ static inline bool Space_format(char *dest, bytes cap, bool *outTruncated, const
  * Control/non-ASCII bytes become \xHH for an unambiguous byte-span projection.
  * Internal callers supply a valid terminated prefix with available capacity.
  */
-static inline bool Space_quote(const char *text, bytes length, char *dest, bytes cap, bool *outTruncated) {
-    static const char HEX[] = "0123456789abcdef";
+static inline bool Space_quote(string text, bytes length, utf8 *dest, bytes cap, bool *outTruncated) {
+    static const utf8 HEX[] = "0123456789abcdef";
     bytes at = strlen(dest);
     bool cut = false;
     for (bytes i = 0; i < length; ++i) {
         u8 c = (u8) text[i];
-        char escaped[4];
+        utf8 escaped[4];
         bytes n = 1;
-        escaped[0] = (char) c;
+        escaped[0] = (utf8) c;
         if (c == '\n' || c == '\t' || c == '"' || c == '\\') {
             escaped[0] = '\\';
-            escaped[1] = c == '\n' ? 'n' : c == '\t' ? 't' : (char) c;
+            escaped[1] = c == '\n' ? 'n' : c == '\t' ? 't' : (utf8) c;
             n = 2;
         } else if (c < ' ' || c >= 127) {
             escaped[0] = '\\';

@@ -25,7 +25,7 @@ u64 Channel_getId(const Channel *self);
 u64 Channel_getServerId(const Channel *self);
 u64 Channel_getModelUserId(const Channel *self);
 
-bool Channel_toString(const Channel *self, char *dest, bytes cap, bool *outTruncated);
-bool Channel_toStringStruct(const Channel *self, char *dest, bytes cap, bool *outTruncated);
+bool Channel_toString(const Channel *self, utf8 *dest, bytes cap, bool *outTruncated);
+bool Channel_toStringStruct(const Channel *self, utf8 *dest, bytes cap, bool *outTruncated);
 
 #endif

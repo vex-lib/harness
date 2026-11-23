@@ -15,12 +15,12 @@ typedef struct Message {
     u64 channelId;
     u64 authorId;
     u64 taskId;
-    const char *text;
+    string text;
     bytes length;
 } Message;
 
 Message Message_0();
-Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, const char *text, bytes length);
+Message Message_6(u64 id, u64 channelId, u64 authorId, u64 taskId, string text, bytes length);
 
 #define Message(...) SPACE_CONSTRUCT(Message, __VA_ARGS__)
 #define Message_zero() Message_0()
@@ -29,10 +29,10 @@ u64 Message_getId(const Message *self);
 u64 Message_getChannelId(const Message *self);
 u64 Message_getAuthorId(const Message *self);
 u64 Message_getTaskId(const Message *self);
-const char *Message_getText(const Message *self);
+string Message_getText(const Message *self);
 bytes Message_getLength(const Message *self);
 
-bool Message_toString(const Message *self, char *dest, bytes cap, bool *outTruncated);
-bool Message_toStringStruct(const Message *self, char *dest, bytes cap, bool *outTruncated);
+bool Message_toString(const Message *self, utf8 *dest, bytes cap, bool *outTruncated);
+bool Message_toStringStruct(const Message *self, utf8 *dest, bytes cap, bool *outTruncated);
 
 #endif

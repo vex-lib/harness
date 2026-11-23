@@ -11,24 +11,24 @@
  */
 typedef struct ModelUser {
     u64 id;
-    char name[MODEL_USER_NAME_CAP];
+    utf8 name[MODEL_USER_NAME_CAP];
     u64 modelId;
 } ModelUser;
 
 ModelUser ModelUser_0();
-ModelUser ModelUser_3(u64 id, const char *name, u64 modelId);
+ModelUser ModelUser_3(u64 id, string name, u64 modelId);
 
 #define ModelUser(...) SPACE_CONSTRUCT(ModelUser, __VA_ARGS__)
 #define ModelUser_zero() ModelUser_0()
 
-bool ModelUser_setName(ModelUser *self, const char *name);
+bool ModelUser_setName(ModelUser *self, string name);
 bool ModelUser_setModelId(ModelUser *self, u64 modelId);
 
 u64 ModelUser_getId(const ModelUser *self);
-const char *ModelUser_getName(const ModelUser *self);
+string ModelUser_getName(const ModelUser *self);
 u64 ModelUser_getModelId(const ModelUser *self);
 
-bool ModelUser_toString(const ModelUser *self, char *dest, bytes cap, bool *outTruncated);
-bool ModelUser_toStringStruct(const ModelUser *self, char *dest, bytes cap, bool *outTruncated);
+bool ModelUser_toString(const ModelUser *self, utf8 *dest, bytes cap, bool *outTruncated);
+bool ModelUser_toStringStruct(const ModelUser *self, utf8 *dest, bytes cap, bool *outTruncated);
 
 #endif
