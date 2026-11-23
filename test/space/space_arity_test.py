@@ -70,7 +70,7 @@ class ArityCompileTest(unittest.TestCase):
                 self.assertIn(symbol, diag, diag)
 
     def test_wrong_argument_types_are_rejected(self):
-        for expr in ("() ModelUser(1, 2, 3);",          # int where const char* is required
+        for expr in ("() ModelUser(1, 2, 3);",          # int where const utf8* is required
                      "() Channel(\"x\", 2);"):          # string where u64 is required
             with self.subTest(expr=expr):
                 ok, _ = syntax_check(f"int main(){{ {expr} return 0; }}")

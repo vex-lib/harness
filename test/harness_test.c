@@ -4,6 +4,7 @@
  */
 
 #include "vex.h"
+#include "re/primitive/vex-string.h"
 #include "test_support.h"
 
 #include <stdio.h>
@@ -21,16 +22,16 @@ static i32 g_failures = 0;
 #define CHECK(tag, name, cond)                                            \
     do {                                                                  \
         if (cond) {                                                       \
-            printf("[%s] PASS %s\n", tag, name);                          \
+            print("[", tag, "] PASS ", name);                          \
         } else {                                                          \
-            printf("[%s] FAIL %s\n", tag, name);                          \
+            print("[", tag, "] FAIL ", name);                          \
             g_failures++;                                                 \
         }                                                                 \
     } while (0)
 
 /** Proves Channel identity, server scoping, boundary IDs, null-safe getters, and projections. */
 static fn suite_channel() {
-    printf("=== Channel owner suite ===\n");
+    print("=== Channel owner suite ===");
 
     Channel zero = Channel_0();
     Channel chooserZero = Channel();
@@ -63,21 +64,21 @@ static fn suite_channel() {
     utf8 buf[128];
     bool cut = false;
     CHECK("channel", "toString null self",
-          Channel_toString(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          Channel_toString(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("channel", "toString value",
-          Channel_toString(&c, buf, sizeof(buf), &cut) && strcmp(buf, "channel 11/22") == 0);
+          Channel_toString(&c, buf, sizeof(buf), &cut) && string_equals(buf, "channel 11/22"));
     CHECK("channel", "toStringStruct null self",
-          Channel_toStringStruct(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          Channel_toStringStruct(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("channel", "toStringStruct fields",
           Channel_toStringStruct(&c, buf, sizeof(buf), &cut) &&
-          strcmp(buf, "Channel{id=22,serverId=11,modelUserId=22}") == 0 && !cut);
+          string_equals(buf, "Channel{id=22,serverId=11,modelUserId=22}") && !cut);
     CHECK("channel", "toString truncates", !Channel_toString(&c, buf, 4, &cut) && cut);
     CHECK("channel", "toStringStruct truncates", !Channel_toStringStruct(&c, buf, 5, &cut) && cut);
 }
 
 /** Proves Message borrowed payload identity, embedded NUL spans, rejections, and projections. */
 static fn suite_message() {
-    printf("=== Message owner suite ===\n");
+    print("=== Message owner suite ===");
 
     Message zero = Message_0();
     CHECK("message", "zero is all-zero",
@@ -85,7 +86,7 @@ static fn suite_message() {
     CHECK("message", "chooser() == _0", Message().id == 0 && Message().text == nullptr);
     CHECK("message", "zero() == _0", Message_zero().id == 0);
 
-    const utf8 *payload = "hello";
+    string payload = "hello";
     Message m = Message(5, 6, 0, 0, payload, 5);
     CHECK("message", "chooser 6-arg id", m.id == 5);
     CHECK("message", "chooser 6-arg channel", m.channelId == 6);
@@ -124,22 +125,22 @@ static fn suite_message() {
     utf8 buf[256];
     bool cut = false;
     CHECK("message", "toString null self",
-          Message_toString(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          Message_toString(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("message", "toString value",
-          Message_toString(&m, buf, sizeof(buf), &cut) && strcmp(buf, "message 5 (5 bytes)") == 0);
+          Message_toString(&m, buf, sizeof(buf), &cut) && string_equals(buf, "message 5 (5 bytes)"));
     CHECK("message", "toStringStruct null self",
-          Message_toStringStruct(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          Message_toStringStruct(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("message", "toStringStruct fields",
           Message_toStringStruct(&m, buf, sizeof(buf), &cut) &&
-          strcmp(buf, "Message{id=5,channelId=6,authorId=0,taskId=0,text[length=5]=\"hello\"}") == 0 && !cut);
+          string_equals(buf, "Message{id=5,channelId=6,authorId=0,taskId=0,text[length=5]=\"hello\"}") && !cut);
 
-    const utf8 *esc = "a\nb.sh\tc\"d\\";
+    string esc = "a\nb.sh\tc\"d\\";
     Message e = Message(1, 2, 0, 0, esc, strlen(esc));
     CHECK("message", "toStringStruct escapes payload",
           Message_toStringStruct(&e, buf, sizeof(buf), &cut) &&
-          strcmp(buf, "Message{id=1,channelId=2,authorId=0,taskId=0,text[length=8]=\"a\\nb\\tc\\\"d\\\\\"}") == 0);
+          string_equals(buf, "Message{id=1,channelId=2,authorId=0,taskId=0,text[length=8]=\"a\\nb\\tc\\\"d\\\\\"}"));
     CHECK("message", "toStringStruct escapes NUL",
-          Message_toStringStruct(&nul, buf, sizeof(buf), &cut) && strstr(buf, "\\x00") != nullptr);
+          Message_toStringStruct(&nul, buf, sizeof(buf), &cut) && string_contains(buf, "\\x00"));
     CHECK("message", "toString truncates", !Message_toString(&m, buf, 6, &cut) && cut);
     CHECK("message", "toStringStruct truncates", !Message_toStringStruct(&m, buf, 12, &cut) && cut);
     CHECK("message", "toStringStruct null flag tolerated",
@@ -160,8 +161,8 @@ static bool isZeroUser(ModelUser v) {
 
 /** Proves ModelUser persona identity, handle validation, reject-and-preserve setters, and projections. */
 static fn suite_model_user() {
-    printf("=== ModelUser owner suite ===\n");
-    const utf8 *n23 = "aaaaaaaaaaaaaaaaaaaaaaa";
+    print("=== ModelUser owner suite ===");
+    string n23 = "aaaaaaaaaaaaaaaaaaaaaaa";
 
     ModelUser zero = ModelUser_0();
     ModelUser chooserZero = ModelUser();
@@ -172,7 +173,7 @@ static fn suite_model_user() {
 
     ModelUser u = ModelUser(7, "vex", 3);
     CHECK("model_user", "chooser 3-arg id", u.id == 7);
-    CHECK("model_user", "chooser 3-arg name", strcmp(u.name, "vex") == 0);
+    CHECK("model_user", "chooser 3-arg name", string_equals(u.name, "vex"));
     CHECK("model_user", "chooser 3-arg modelId", u.modelId == 3);
     CHECK("model_user", "name is zero-padded", u.name[4] == '\0' && u.name[23] == '\0');
 
@@ -190,7 +191,7 @@ static fn suite_model_user() {
 
     ModelUser s = ModelUser(1, "longername", 2);
     CHECK("model_user", "setName accepts",
-          ModelUser_setName(&s, "short") && strcmp(s.name, "short") == 0);
+          ModelUser_setName(&s, "short") && string_equals(s.name, "short"));
     CHECK("model_user", "setName re-pads leftovers", s.name[5] == '\0' && s.name[10] == '\0');
     ModelUser before = s;
     CHECK("model_user", "setName rejects null", !ModelUser_setName(&s, nullptr));
@@ -212,19 +213,19 @@ static fn suite_model_user() {
           ModelUser_getName(&zero) != nullptr && ModelUser_getName(&zero)[0] == '\0');
     CHECK("model_user", "getters live",
           ModelUser_getId(&s) == 1 && ModelUser_getModelId(&s) == 99 &&
-          strcmp(ModelUser_getName(&s), "short") == 0);
+          string_equals(ModelUser_getName(&s), "short"));
 
     utf8 buf[128];
     bool cut = false;
     CHECK("model_user", "toString null self",
-          ModelUser_toString(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          ModelUser_toString(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("model_user", "toString value",
-          ModelUser_toString(&s, buf, sizeof(buf), &cut) && strcmp(buf, "@short") == 0 && !cut);
+          ModelUser_toString(&s, buf, sizeof(buf), &cut) && string_equals(buf, "@short") && !cut);
     CHECK("model_user", "toStringStruct null self",
-          ModelUser_toStringStruct(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          ModelUser_toStringStruct(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("model_user", "toStringStruct fields",
           ModelUser_toStringStruct(&s, buf, sizeof(buf), &cut) &&
-          strcmp(buf, "ModelUser{id=1,name=\"short\",modelId=99}") == 0 && !cut);
+          string_equals(buf, "ModelUser{id=1,name=\"short\",modelId=99}") && !cut);
     CHECK("model_user", "toString truncates", !ModelUser_toString(&s, buf, 3, &cut) && cut);
     CHECK("model_user", "toStringStruct truncates", !ModelUser_toStringStruct(&s, buf, 8, &cut) && cut);
     CHECK("model_user", "toStringStruct null dest rejects",
@@ -269,7 +270,7 @@ static Probe Probe_3(i32 a, i32 b, i32 c)
 
 /** Proves SPACE_CONSTRUCT arity dispatch, handle validation, formatting, and quote escaping. */
 static fn suite_support() {
-    printf("=== Space support owner suite ===\n");
+    print("=== Space support owner suite ===");
 
     CHECK("support", "chooser 0 args selects Probe_0", Probe().sum == 0);
     CHECK("support", "chooser 2 args selects Probe_2", Probe(2, 3).sum == 5);
@@ -294,29 +295,29 @@ static fn suite_support() {
     utf8 buf[64];
     bool cut = true;
     CHECK("support", "format fits",
-          Space_format(buf, sizeof(buf), &cut, "%d", 42) && !cut && strcmp(buf, "42") == 0);
+          Space_format(buf, sizeof(buf), &cut, "%d", 42) && !cut && string_equals(buf, "42"));
     CHECK("support", "format exact fit",
-          Space_format(buf, 3, &cut, "ab") && !cut && strcmp(buf, "ab") == 0);
+          Space_format(buf, 3, &cut, "ab") && !cut && string_equals(buf, "ab"));
     CHECK("support", "format one short truncates",
-          !Space_format(buf, 2, &cut, "ab") && cut && strcmp(buf, "a") == 0);
+          !Space_format(buf, 2, &cut, "ab") && cut && string_equals(buf, "a"));
     CHECK("support", "format null dest rejects", !Space_format(nullptr, 8, &cut, "x") && cut);
     CHECK("support", "format zero cap rejects", !Space_format(buf, 0, &cut, "x") && cut);
     CHECK("support", "format null flag tolerated",
-          Space_format(buf, sizeof(buf), nullptr, "ok") && strcmp(buf, "ok") == 0);
+          Space_format(buf, sizeof(buf), nullptr, "ok") && string_equals(buf, "ok"));
 
     buf[0] = '\0';
     bool ok = Space_quote("hi", 2, buf, sizeof(buf), &cut);
-    CHECK("support", "quote plain", ok && !cut && strcmp(buf, "hi\"}") == 0);
+    CHECK("support", "quote plain", ok && !cut && string_equals(buf, "hi\"}"));
     buf[0] = '\0';
-    const utf8 *esc = "a\nb.sh\tc\"d\\";
+    string esc = "a\nb.sh\tc\"d\\";
     ok = Space_quote(esc, strlen(esc), buf, sizeof(buf), &cut);
-    CHECK("support", "quote escapes", ok && strcmp(buf, "a\\nb\\tc\\\"d\\\\\"}") == 0);
+    CHECK("support", "quote escapes", ok && string_equals(buf, "a\\nb\\tc\\\"d\\\\\"}"));
     buf[0] = '\0';
     ok = Space_quote("\x01\x7f\x80", 3, buf, sizeof(buf), &cut);
-    CHECK("support", "quote control/high bytes", ok && strcmp(buf, "\\x01\\x7f\\x80\"}") == 0);
+    CHECK("support", "quote control/high bytes", ok && string_equals(buf, "\\x01\\x7f\\x80\"}"));
     buf[0] = '\0';
     ok = Space_quote("", 0, buf, sizeof(buf), &cut);
-    CHECK("support", "quote empty span", ok && strcmp(buf, "\"}") == 0);
+    CHECK("support", "quote empty span", ok && string_equals(buf, "\"}"));
     buf[0] = '\0';
     ok = Space_quote("abcdef", 6, buf, 6, &cut);
     CHECK("support", "quote truncates", !ok && cut && buf[0] == 'a');
@@ -331,7 +332,7 @@ static fn suite_support() {
 
 /** Proves Task lifecycle transitions, delegation narrowing, authority checks, and projections. */
 static fn suite_task() {
-    printf("=== Task owner suite ===\n");
+    print("=== Task owner suite ===");
 
     Task zero = Task_0();
     CHECK("task", "zero is all-zero", zero.id == 0 && zero.state == 0);
@@ -435,14 +436,14 @@ static fn suite_task() {
     utf8 buf[256];
     bool cut = false;
     CHECK("task", "toString null self",
-          Task_toString(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          Task_toString(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("task", "toString value",
-          Task_toString(&root, buf, sizeof(buf), &cut) && strcmp(buf, "task 100 state=1") == 0);
+          Task_toString(&root, buf, sizeof(buf), &cut) && string_equals(buf, "task 100 state=1"));
     CHECK("task", "toStringStruct null self",
-          Task_toStringStruct(nullptr, buf, sizeof(buf), &cut) && strcmp(buf, "nullptr") == 0);
+          Task_toStringStruct(nullptr, buf, sizeof(buf), &cut) && string_equals(buf, "nullptr"));
     CHECK("task", "toStringStruct fields",
           Task_toStringStruct(&root, buf, sizeof(buf), &cut) &&
-          strcmp(buf, "Task{id=100,channelId=7,requesterId=42,assigneeId=9,parentId=0,permissions=3,state=1}") == 0);
+          string_equals(buf, "Task{id=100,channelId=7,requesterId=42,assigneeId=9,parentId=0,permissions=3,state=1}"));
     CHECK("task", "toString truncates", !Task_toString(&root, buf, 4, &cut) && cut);
     CHECK("task", "toStringStruct truncates", !Task_toStringStruct(&root, buf, 10, &cut) && cut);
 }
@@ -456,22 +457,22 @@ i32 main(i32 argc, utf8 **argv) {
         { "support", suite_support },
         { "task", suite_task },
     };
-    const utf8 *filter = argc > 1 ? argv[1] : nullptr;
+    string filter = argc > 1 ? argv[1] : nullptr;
     bytes ran = 0;
 
     for (bytes i = 0; i < sizeof(suites) / sizeof(suites[0]); i++) {
-        if (filter && strcmp(filter, suites[i].name) != 0)
+        if (filter && !string_equals(filter, suites[i].name))
             continue;
         suites[i].run();
         ran++;
     }
 
     if (filter && ran == 0) {
-        fprintf(stderr, "harness_test: unknown suite '%s'\n", filter);
+        fprint(stderr, "harness_test: unknown suite '", filter, "'");
         return 2;
     }
     if (g_failures != 0) {
-        fprintf(stderr, "harness_test: %d FAILURES\n", g_failures);
+        fprint(stderr, "harness_test: ", g_failures, " FAILURES");
         return 1;
     }
     puts("harness_test: PASS");

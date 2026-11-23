@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Registered runner for the harness space owners.
 
-Compiles and runs each C owner twice — strict `-Wall -Wextra -Werror`, then
-ASan/UBSan — and runs the Python owners (the compile-negative arity battery).
+Compiles and runs each C owner twice, strict `-Wall -Wextra -Werror`, then
+ASan/UBSan, and runs the Python owners (the compile-negative arity battery).
 Self-contained: no b, no network, no interactive launch. A C owner that fails to
 build, fails an assertion, or trips a sanitizer fails the run.
 """
